@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { productos, getProductoBySlug, formatPrecio } from '../../lib/productos';
 import { buildWhatsAppUrl, productWhatsAppMessage } from '../../lib/whatsapp';
+import { SITE } from '../../lib/site';
+import { productSchema, breadcrumbSchema } from '../../lib/seo';
 
 export function getStaticPaths() {
   return productos.map((producto) => ({
@@ -21,11 +23,22 @@ const whatsappUrl = buildWhatsAppUrl(productWhatsAppMessage(producto.nombre));
 const relacionados = productos
   .filter((p) => p.categoria === producto.categoria && p.slug !== producto.slug)
   .slice(0, 3);
+const productUrl = new URL(`/producto/${producto.slug}`, Astro.site).toString();
+const jsonLd = [
+  productSchema(producto, productUrl),
+  breadcrumbSchema([
+    { name: 'Inicio', url: SITE.url },
+    { name: 'Catálogo', url: `${SITE.url}/catalogo` },
+    { name: producto.nombre, url: productUrl },
+  ]),
+];
 ---
 
 <BaseLayout
   title={producto.nombre}
-  description={`${producto.descripcion} Consultá por WhatsApp en El Rústico, San José de Metán.`}
+  description={`${producto.nombre} — ${producto.categoria.toLowerCase()} rústico en ${SITE.ciudad}, ${SITE.provincia}. ${producto.descripcion} Consultá por WhatsApp.`}
+  image={producto.imagen}
+  jsonLd={jsonLd}
 >
   <section class="mx-auto max-w-6xl px-4 py-10 md:px-6">
     <nav class="mb-8 text-sm text-rustico-500">

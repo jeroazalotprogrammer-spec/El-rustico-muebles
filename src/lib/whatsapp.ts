@@ -1,13 +1,13 @@
-const WHATSAPP_NUMBER = '5493876408322';
+import { SITE } from './site';
 
 export function buildWhatsAppUrl(mensaje?: string): string {
-  const base = `https://wa.me/${WHATSAPP_NUMBER}`;
+  const base = `https://wa.me/${SITE.whatsapp.number}`;
   if (!mensaje) return base;
   return `${base}?text=${encodeURIComponent(mensaje)}`;
 }
 
 export function productWhatsAppMessage(nombre: string): string {
-  return `Hola, me interesa el producto "${nombre}" que vi en El Rústico. ¿Podrían darme más información?`;
+  return `Hola, me interesa el producto "${nombre}" que vi en ${SITE.name}. ¿Podrían darme más información?`;
 }
 
-export const WHATSAPP_DISPLAY = '+54 9 3876 408322';
+export const WHATSAPP_DISPLAY = SITE.whatsapp.display;

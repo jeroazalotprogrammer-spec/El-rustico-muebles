@@ -3,12 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { productos, categorias } from '../lib/productos';
 import { buildWhatsAppUrl } from '../lib/whatsapp';
+import { SITE } from '../lib/site';
 
 const destacados = productos.filter((p) => p.destacado);
 const whatsappUrl = buildWhatsAppUrl('Hola, quisiera consultar sobre los muebles de El Rústico.');
 ---
 
-<BaseLayout title="El Rústico">
+<BaseLayout
+  title="El Rústico"
+  description="El Rústico — muebles rústicos y artesanales en San José de Metán, Salta. Sofás, mesas, sillas y dormitorio con estilo campestre. Consultá precios por WhatsApp."
+>
   <section class="relative overflow-hidden bg-rustico-800 text-white">
     <div class="absolute inset-0 opacity-20">
       <img
@@ -18,13 +22,13 @@ const whatsappUrl = buildWhatsAppUrl('Hola, quisiera consultar sobre los muebles
       />
     </div>
     <div class="relative mx-auto max-w-6xl px-4 py-20 md:px-6 md:py-32">
-      <p class="text-sm font-semibold uppercase tracking-widest text-rustico-300">San José de Metán, Salta</p>
+      <p class="text-sm font-semibold uppercase tracking-widest text-rustico-300">{SITE.ciudad}, {SITE.provincia}</p>
       <h1 class="mt-4 max-w-2xl font-serif text-4xl font-bold leading-tight md:text-6xl">
-        Muebles con alma rústica para tu hogar
+        Muebles rústicos artesanales en {SITE.ciudad}, {SITE.provincia}
       </h1>
       <p class="mt-6 max-w-xl text-lg text-rustico-200">
-        Piezas artesanales en madera, diseñadas con estilo campestre y la calidez del norte argentino.
-        Consultá disponibilidad y precios por WhatsApp.
+        Piezas en madera con estilo campestre, hechas en el norte salteño. Atendemos {SITE.ciudadCorta},
+        {SITE.provincia} y zonas aledañas. Consultá disponibilidad y precios por WhatsApp.
       </p>
       <div class="mt-8 flex flex-col gap-4 sm:flex-row">
         <a href="/catalogo" class="btn-primary bg-white text-rustico-800 hover:bg-rustico-100">
@@ -89,12 +93,28 @@ const whatsappUrl = buildWhatsAppUrl('Hola, quisiera consultar sobre los muebles
       </div>
       <div class="overflow-hidden rounded-2xl">
         <img
-          src="https://images.unsplash.com/photo-1615876231816-7b2c4b0e0e0e?w=800&q=80"
+          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80"
           alt="Taller de muebles artesanales"
           class="h-72 w-full object-cover md:h-96"
           loading="lazy"
         />
       </div>
+    </div>
+  </section>
+
+  <section class="border-t border-rustico-200 bg-white py-16">
+    <div class="mx-auto max-w-6xl px-4 md:px-6">
+      <h2 class="section-title">Muebles rústicos en Metán y Salta</h2>
+      <p class="mt-4 max-w-3xl leading-relaxed text-rustico-600">
+        Si buscás muebles rústicos en San José de Metán o en la provincia de Salta, en {SITE.name}
+        encontrás piezas artesanales pensadas para hogares
+        con carácter campestre. Fabricamos y comercializamos sofás, mesas, sillas, muebles de
+        dormitorio y decoración en madera, con atención personalizada por WhatsApp.
+      </p>
+      <p class="mt-4 max-w-3xl leading-relaxed text-rustico-600">
+        También atendemos consultas desde {SITE.zonasAtendidas.slice(1).join(', ')}.
+        Escribinos para coordinar visita, medidas o envío según tu ubicación.
+      </p>
     </div>
   </section>
 

@@ -3,28 +3,62 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import SeoJsonLd from '../components/SeoJsonLd.astro';
+import { SITE } from '../lib/site';
+import { localBusinessSchema } from '../lib/seo';
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title,
-  description = 'El Rústico — Muebles artesanales con estilo campestre en San José de Metán, Salta. Consultá por WhatsApp.',
+  description = SITE.description,
+  image = SITE.ogImage,
+  jsonLd,
 } = Astro.props;
 
-const fullTitle = title === 'El Rústico' ? title : `${title} | El Rústico`;
+const isHome = title === SITE.name || title.includes('Muebles Rústicos');
+const fullTitle = isHome
+  ? `${SITE.name} | Muebles Rústicos en ${SITE.ciudad}, ${SITE.provincia}`
+  : `${title} | ${SITE.name}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const schema = jsonLd ?? localBusinessSchema();
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="keywords" content={SITE.keywords.join(', ')} />
+    <meta name="author" content={SITE.name} />
+    <meta name="geo.region" content="AR-A" />
+    <meta name="geo.placename" content={SITE.ciudad} />
+    <meta name="geo.position" content={`${SITE.geo.lat};${SITE.geo.lng}`} />
+    <meta name="ICBM" content={`${SITE.geo.lat}, ${SITE.geo.lng}`} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#65462e" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="es_AR" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,10 +66,17 @@ const fullTitle = title === 'El Rústico' ? title : `${title} | El Rústico`;
       rel="stylesheet"
     />
     <title>{fullTitle}</title>
+    <SeoJsonLd schema={schema} />
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-rustico-700 focus:px-4 focus:py-2 focus:text-white"
+    >
+      Ir al contenido
+    </a>
     <Header />
-    <main class="flex-1">
+    <main id="contenido" class="flex-1">
       <slot />
     </main>
     <Footer />

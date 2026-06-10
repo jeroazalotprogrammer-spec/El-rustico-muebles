@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { buildWhatsAppUrl } from '../lib/whatsapp';
+import { SITE } from '../lib/site';
 
 const whatsappUrl = buildWhatsAppUrl('Hola, quisiera conocer más sobre El Rústico y sus muebles.');
 ---
 
 <BaseLayout
   title="Nosotros"
-  description="Conocé la historia de El Rústico, muebles artesanales hechos en San José de Metán, Salta, Argentina."
+  description={`Conocé ${SITE.name}, mueblería rústica artesanal en ${SITE.ubicacionCompleta}. Tradición, madera y estilo campestre.`}
 >
   <section class="bg-rustico-800 py-12 text-white md:py-16">
     <div class="mx-auto max-w-6xl px-4 md:px-6">

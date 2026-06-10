@@ -1,4 +1,6 @@
 ---
+import { SITE } from '../lib/site';
+
 const navLinks = [
   { href: '/', label: 'Inicio' },
   { href: '/catalogo', label: 'Catálogo' },
@@ -16,8 +18,8 @@ const currentPath = Astro.url.pathname;
         ER
       </div>
       <div>
-        <p class="font-serif text-xl font-bold leading-tight text-rustico-800">El Rústico</p>
-        <p class="text-xs text-rustico-500">Muebles artesanales</p>
+        <p class="font-serif text-xl font-bold leading-tight text-rustico-800">{SITE.name}</p>
+        <p class="text-xs text-rustico-500">{SITE.tagline}</p>
       </div>
     </a>
 

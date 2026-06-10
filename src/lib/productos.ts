@@ -1,5 +1,10 @@
 import productosData from '../data/productos.json';
 
+/**
+ * Para cargar fotos reales: guardá la imagen en public/images/productos/{slug}.jpg
+ * y cambiá el campo "imagen" a "/images/productos/{slug}.jpg".
+ */
+
 export interface Producto {
   slug: string;
   nombre: string;

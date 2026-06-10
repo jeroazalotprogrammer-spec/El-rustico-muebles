@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-rustico-50 text-rustico-900 font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-rustico-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-rustico-800 focus:outline-none focus:ring-2 focus:ring-rustico-500 focus:ring-offset-2;
+  }
+
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1fb855] focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-rustico-700 px-6 py-3 text-sm font-semibold text-rustico-700 transition hover:bg-rustico-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-rustico-500 focus:ring-offset-2;
+  }
+
+  .section-title {
+    @apply font-serif text-3xl font-bold text-rustico-800 md:text-4xl;
+  }
+
+  .section-subtitle {
+    @apply mt-2 text-lg text-rustico-600;
+  }
+}

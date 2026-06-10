@@ -1,0 +1,42 @@
+---
+import { buildWhatsAppUrl, WHATSAPP_DISPLAY } from '../lib/whatsapp';
+
+const whatsappUrl = buildWhatsAppUrl('Hola, quisiera consultar sobre los muebles de El Rústico.');
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-rustico-200 bg-rustico-800 text-rustico-100">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-3 md:px-6">
+    <div>
+      <h3 class="font-serif text-xl font-bold text-white">El Rústico</h3>
+      <p class="mt-3 text-sm leading-relaxed text-rustico-300">
+        Muebles artesanales con estilo campestre. Hechos con dedicación en San José de Metán, Salta.
+      </p>
+    </div>
+
+    <div>
+      <h4 class="text-sm font-semibold uppercase tracking-wider text-rustico-400">Enlaces</h4>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li><a href="/catalogo" class="transition hover:text-white">Catálogo</a></li>
+        <li><a href="/nosotros" class="transition hover:text-white">Nosotros</a></li>
+        <li><a href="/contacto" class="transition hover:text-white">Contacto</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="text-sm font-semibold uppercase tracking-wider text-rustico-400">Contacto</h4>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li>San José de Metán, Salta, Argentina</li>
+        <li>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="transition hover:text-white">
+            WhatsApp: {WHATSAPP_DISPLAY}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-rustico-700 px-4 py-6 text-center text-xs text-rustico-400">
+    © {year} El Rústico. Todos los derechos reservados.
+  </div>
+</footer>

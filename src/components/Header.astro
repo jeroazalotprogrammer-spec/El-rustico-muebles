@@ -1,0 +1,83 @@
+---
+const navLinks = [
+  { href: '/', label: 'Inicio' },
+  { href: '/catalogo', label: 'Catálogo' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 border-b border-rustico-200 bg-rustico-50/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
+    <a href="/" class="group flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-rustico-700 text-lg font-bold text-white transition group-hover:bg-rustico-800">
+        ER
+      </div>
+      <div>
+        <p class="font-serif text-xl font-bold leading-tight text-rustico-800">El Rústico</p>
+        <p class="text-xs text-rustico-500">Muebles artesanales</p>
+      </div>
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium transition hover:text-rustico-700',
+            currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+              ? 'text-rustico-700 underline decoration-rustico-400 decoration-2 underline-offset-4'
+              : 'text-rustico-600',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <button
+      id="menu-toggle"
+      type="button"
+      class="flex h-10 w-10 items-center justify-center rounded-lg border border-rustico-300 text-rustico-700 md:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+    >
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <nav id="mobile-menu" class="hidden border-t border-rustico-200 bg-rustico-50 px-4 py-4 md:hidden">
+    <ul class="flex flex-col gap-3">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'block rounded-lg px-3 py-2 text-sm font-medium transition',
+              currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))
+                ? 'bg-rustico-200 text-rustico-800'
+                : 'text-rustico-600 hover:bg-rustico-100',
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+</script>

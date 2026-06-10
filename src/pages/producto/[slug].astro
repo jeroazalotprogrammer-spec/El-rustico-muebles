@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { productos, getProductoBySlug, formatPrecio } from '../../lib/productos';
+import { buildWhatsAppUrl, productWhatsAppMessage } from '../../lib/whatsapp';
+
+export function getStaticPaths() {
+  return productos.map((producto) => ({
+    params: { slug: producto.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const producto = getProductoBySlug(slug!);
+
+if (!producto) {
+  return Astro.redirect('/catalogo');
+}
+
+const whatsappUrl = buildWhatsAppUrl(productWhatsAppMessage(producto.nombre));
+const relacionados = productos
+  .filter((p) => p.categoria === producto.categoria && p.slug !== producto.slug)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={producto.nombre}
+  description={`${producto.descripcion} Consultá por WhatsApp en El Rústico, San José de Metán.`}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10 md:px-6">
+    <nav class="mb-8 text-sm text-rustico-500">
+      <a href="/" class="hover:text-rustico-700">Inicio</a>
+      <span class="mx-2">/</span>
+      <a href="/catalogo" class="hover:text-rustico-700">Catálogo</a>
+      <span class="mx-2">/</span>
+      <span class="text-rustico-800">{producto.nombre}</span>
+    </nav>
+
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="overflow-hidden rounded-2xl bg-rustico-100">
+        <img
+          src={producto.imagen}
+          alt={producto.nombre}
+          class="h-full w-full object-cover aspect-[4/3] lg:aspect-auto lg:min-h-[28rem]"
+        />
+      </div>
+
+      <div>
+        <span class="rounded-full bg-rustico-200 px-3 py-1 text-xs font-medium text-rustico-700">
+          {producto.categoria}
+        </span>
+        <h1 class="mt-4 font-serif text-3xl font-bold text-rustico-800 md:text-4xl">
+          {producto.nombre}
+        </h1>
+
+        {producto.precioConsultar || producto.precio === null ? (
+          <p class="mt-4 text-2xl font-semibold text-terracota-600">Consultar precio</p>
+        ) : (
+          <p class="mt-4 text-3xl font-bold text-rustico-800">{formatPrecio(producto.precio)}</p>
+        )}
+
+        <p class="mt-6 leading-relaxed text-rustico-600">{producto.descripcion}</p>
+
+        <dl class="mt-8 space-y-3 rounded-xl border border-rustico-200 bg-white p-5">
+          <div class="flex justify-between text-sm">
+            <dt class="text-rustico-500">Material</dt>
+            <dd class="font-medium text-rustico-800">{producto.material}</dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-rustico-500">Categoría</dt>
+            <dd class="font-medium text-rustico-800">{producto.categoria}</dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-rustico-500">Ubicación</dt>
+            <dd class="font-medium text-rustico-800">San José de Metán, Salta</dd>
+          </div>
+        </dl>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-whatsapp flex-1">
+            Consultar por WhatsApp
+          </a>
+          <a href="/catalogo" class="btn-outline flex-1 text-center">Volver al catálogo</a>
+        </div>
+      </div>
+    </div>
+
+    {relacionados.length > 0 && (
+      <div class="mt-16">
+        <h2 class="font-serif text-2xl font-bold text-rustico-800">También te puede interesar</h2>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {relacionados.map((rel) => (
+            <ProductCard producto={rel} />
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

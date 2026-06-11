@@ -1,12 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { productos, categorias } from '../lib/productos';
+import CatalogoApp from '../components/react/CatalogoApp';
+import { fetchProductos, isNeonConfigured } from '../lib/db';
+
+export const prerender = false;
 
 const categoriaFiltro = Astro.url.searchParams.get('categoria');
-const productosFiltrados = categoriaFiltro
-  ? productos.filter((p) => p.categoria === categoriaFiltro)
-  : productos;
+const productos = await fetchProductos();
+const categorias = [...new Set(productos.map((p) => p.categoria))].sort();
+const dataSource = isNeonConfigured() ? 'neon' : 'json';
 ---
 
 <BaseLayout
@@ -17,53 +19,18 @@ const productosFiltrados = categoriaFiltro
     <div class="mx-auto max-w-6xl px-4 md:px-6">
       <h1 class="font-serif text-3xl font-bold md:text-5xl">Catálogo de muebles en Metán, Salta</h1>
       <p class="mt-3 max-w-xl text-rustico-300">
-        Explorá nuestra colección de muebles rústicos artesanales. Consultá precio y disponibilidad por WhatsApp.
+        Explorá nuestra colección con búsqueda y filtros. Consultá precio y disponibilidad por WhatsApp.
       </p>
     </div>
   </section>
 
   <section class="mx-auto max-w-6xl px-4 py-10 md:px-6">
-    <div class="flex flex-wrap gap-2">
-      <a
-        href="/catalogo"
-        class:list={[
-          'rounded-full px-4 py-2 text-sm font-medium transition',
-          !categoriaFiltro
-            ? 'bg-rustico-700 text-white'
-            : 'bg-rustico-100 text-rustico-700 hover:bg-rustico-200',
-        ]}
-      >
-        Todos
-      </a>
-      {categorias.map((cat) => (
-        <a
-          href={`/catalogo?categoria=${encodeURIComponent(cat)}`}
-          class:list={[
-            'rounded-full px-4 py-2 text-sm font-medium transition',
-            categoriaFiltro === cat
-              ? 'bg-rustico-700 text-white'
-              : 'bg-rustico-100 text-rustico-700 hover:bg-rustico-200',
-          ]}
-        >
-          {cat}
-        </a>
-      ))}
-    </div>
-
-    {categoriaFiltro && (
-      <p class="mt-6 text-sm text-rustico-600">
-        Mostrando <strong>{productosFiltrados.length}</strong> productos en <strong>{categoriaFiltro}</strong>
-      </p>
-    )}
-
-    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {productosFiltrados.map((producto) => (
-        <ProductCard producto={producto} />
-      ))}
-    </div>
-
-    {productosFiltrados.length === 0 && (
-      <p class="mt-12 text-center text-rustico-600">No hay productos en esta categoría.</p>
-    )}
+    <CatalogoApp
+      client:only="react"
+      productos={productos}
+      categorias={categorias}
+      initialCategoria={categoriaFiltro}
+      dataSource={dataSource}
+    />
   </section>
 </BaseLayout>
